@@ -55,7 +55,7 @@ function modules() {
     .pipe(gulp.dest('./vendor/jquery'));
   var faw = gulp.src('./node_modules/@fortawesome/fontawesome-free/webfonts/**/*').pipe(gulp.dest('./vendor/fontawesome-free/webfonts'));
   var fac = gulp.src('./node_modules/@fortawesome/fontawesome-free/css/all.min.css').pipe(gulp.dest('./vendor/fontawesome-free/css'));
-  var ws = gulp.src('./node_modules/wavesurfer/dist/**/*').pipe(gulp.dest('./vendor/fs/'));
+  var ws = gulp.src('./node_modules/wavesurfer/dist/**/*').pipe(gulp.dest('./vendor/wavesurfer/'));
   return merge(bootstrap, jquery, faw, fac, ws);
 }
 
@@ -74,10 +74,10 @@ function css() {
         browsers: ['last 2 versions'],
         cascade: false
       }))
-      .pipe(addsrc(["./css/**/*.css", "!./css/**/*.min.css"]))
       .pipe(header(banner, {
         pkg: pkg
       }))
+      .pipe(addsrc(["./css/**/*.css", "!./css/**/*.min.css"]))
       .pipe(gulp.dest("./css"))
       .pipe(rename({
         suffix: ".min"
@@ -118,6 +118,8 @@ gulp.task('buildProd', () => {
       .pipe(gulp.dest('./release/img/'));
   var js = gulp.src(['./js/**/*', '!./js/*.js', './js/*.min.js',])
       .pipe(gulp.dest('./release/js/'));
+  var audio = gulp.src('./bg.mp3')
+        .pipe(gulp.dest('./release/'));
   var vendor = gulp.src(['./vendor/**/*',
     '!./vendor/**/*.js', './vendor/**/*.min.js',
     '!./vendor/**/*.css', '!./vendor/**/*.map', './vendor/**/*.min.css',
@@ -125,7 +127,7 @@ gulp.task('buildProd', () => {
       .pipe(gulp.dest('./release/vendor/'));
   var index = gulp.src(['./index.html'])
       .pipe(gulp.dest('./release/'));
-  return merge(css, img, js, vendor, index);
+  return merge(css, img, js, vendor, index, audio);
 });
 
 gulp.task('mkZip', () =>

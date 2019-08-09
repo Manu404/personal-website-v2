@@ -1,77 +1,3 @@
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
-/*!
- * Start Bootstrap - Landing Page EIS v4.2.1 ()
- * Copyright 2013-2019 
- * Licensed under  (https://github.com/BlackrockDigital/landing_page_eis/blob/master/LICENSE)
- */
 body {
   background: url("../img/landing.jpg") no-repeat center center fixed;
   background-size: cover;
@@ -94,33 +20,74 @@ p {
 
 span.sep1 {
   color: #e2e2e2;
+  font-size: 0.8em;
 }
 
 span.sep2 {
   color: #cecece;
+  font-size: 0.6em;
 }
 
-span.fr {
+span.low_accent {
   color: #bebebe;
+  font-size: 0.7em;
 }
+
+span.title_accent {
+  color: #bebebe;
+  font-size: 0.8em;
+}
+
 
 .bg-dark {
   background-color: #1b1e21 !important;
 }
 
-.fa, .fab {
+.main-content .fa, .main-content .fab {
   margin-left: 2em;
   color: #fefefe !important;
 }
 
-i.fab, i.fa {
+.main-content i.fab, .main-content i.fa {
   -webkit-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
 }
 
-i.fab:hover, i.fa:hover {
+.main-content i.fab:hover, .main-content i.fa:hover {
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
   cursor: pointer;
   color: #f7f7f7 !important;
+}
+
+.player .fa {
+  margin-left: 2em;
+  color: #fefefe !important;
+}
+
+.player i.fa {
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.player i.fa:hover {
+  cursor: pointer;
+  color: #d4d4d4 !important;
+}
+
+.player #vol_off, .player #vol_on {
+  font-size: 4em !important;
+  margin-left: 0.8em;
+  margin-top: 0.5em;
+}
+
+.player #vol_off {
+  z-index: 1;
+  position: absolute;
+}
+
+.player #vol_on {
+  z-index: 10;
+  position: absolute;
+  visibility: collapse;
 }

@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+/vendor
+/node_modules
+/.idea
+/css/style.min.css
+/release
+/*.zip

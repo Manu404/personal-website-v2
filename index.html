@@ -16,28 +16,37 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+  <nav style="background-color: rgba(27,30,33,0.29)" class="fixed-bottom">
     <div class="container">
+      <div class="row player" style="margin-top: 1em">
+        <div class="col-lg-1">
+          <i id="vol_off" onclick="pause()" class="fa fa-pause-circle"></i>
+          <i id="vol_on" onclick="play()" class="fa fa-play-circle"></i>
+        </div>
+        <div class="col-lg-11">
+          <div style="margin-left: 2em" id="waveform"></div>
+        </div>
+      </div>
     </div>
   </nav>
 
   <section>
-    <div class="container" style="margin-top: 10%">
-      <div class="row">
+    <div class="container" style="margin-top: 7%">
+      <div class="row main-content">
         <div class="col-lg-12">
-          <h1 class="mt-5">Emmanuel Istace</h1>
-          <p style="margin-left: 1.3em; font-size: 0.8em; margin-top: 1.3em;">29yo living in liège, belgium <span class="sep1"> | </span><span class="sep2"> | </span><span class="fr">29 ans habitant à liège, belgique</span></p>
+          <h1 class="mt-5">Emmanuel <span class="title_accent">Istace</span></h1>
+          <p style="margin-left: 1.2em; font-size: 0.9em; margin-top: 1.3em;">29yo living in liège, belgium <span class="sep1"> | </span><span class="sep2"> | </span><span class="low_accent">29 ans habitant à liège, belgique</span></p>
 
-          <p style="margin-left: 1.3em; margin-top: 1em;">musician, guitar teacher <span class="sep1"> | </span> <span class="sep2"> | </span><span class="fr">musicien, professeur de guitare</span></p>
+          <p style="margin-left: 1.3em; margin-top: 1em;">musician, guitar teacher <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">musicien, professeur de guitare</span></p>
           <p style="margin-left: 0.5em">
             <a target="_blank" href="https://www.instagram.com/emmanuelistace/"><i class="fab fa-instagram"></i></a>
             <a target="_blank" href="https://www.youtube.com/user/Manu404"><i class="fab fa-youtube"></i></a>
             <a target="_blank" href="https://m.me/istace.emmanuel"><i class="fab fa-facebook-messenger"></i></a>
-            <a target="_blank" href="https://www.facebook.com/Latelierdelaguitare/"><i class="fab fa-facebook-square"></i></a>
-            <a target="_blank" href="#"><i class="fa fa-calendar"></i></a>
+            <a target="_blank" href="https://www.facebook.com/istace.emmanuel/"><i class="fab fa-facebook-square"></i></a>
+            <a target="_blank" href="https://www.facebook.com/Latelierdelaguitare/"><i class="fa fa-calendar"></i></a>
           </p>
 
-          <p style="margin-left: 1.3em">software developer <span class="sep1"> | </span> <span class="sep2"> | </span><span class="fr">développeur logiciel</span></p>
+          <p style="margin-left: 1.3em">software developer <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">développeur logiciel</span></p>
           <p style="margin-left: 0.5em">
             <a target="_blank" href="mailto:istace.emmanuel@hotmail.com"><i class="fa fa-envelope"></i></a>
             <a target="_blank" href="https://github.com/Manu404/"><i class="fab fa-skype"></i></a>
@@ -47,10 +56,42 @@
           </p>
         </div>
       </div>
+
+
     </div>
   </section>
 
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/wavesurfer/wavesurfer.min.js"></script>
+
+  <script>
+    var wavesurfer = WaveSurfer.create({
+      container: '#waveform',
+      waveColor: '#fefefe',
+      progressColor: '#4a4b4a',
+      barWidth: 2,
+      barHeight: 1, // the height of the wave
+      barGap: null
+    });
+    wavesurfer.load('bg.mp3');
+    wavesurfer.on('ready', function() {
+      wavesurfer.setVolume(0.2);
+      wavesurfer.play();
+    });
+
+    function pause() {
+      wavesurfer.playPause();
+      $("#vol_off").css('visibility', "hidden");
+      $("#vol_on").css('visibility', "visible");
+    }
+
+    function play() {
+      wavesurfer.playPause();
+      $("#vol_on").css('visibility', "hidden");
+      $("#vol_off").css('visibility', "visible")
+    }
+  </script>
+
 </body>
 </html>
