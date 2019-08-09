@@ -21,19 +21,7 @@
 </head>
 
 <body>
-  <nav style="background-color: rgba(27,30,33,0.29)" class="fixed-bottom">
-    <div class="container">
-      <div class="row player" style="margin-top: 1em">
-        <div class="col-lg-1">
-          <i id="vol_off" onclick="pause()" class="fa fa-pause-circle"></i>
-          <i id="vol_on" onclick="play()" class="fa fa-play-circle"></i>
-        </div>
-        <div class="col-lg-11">
-          <div style="margin-left: 2em" id="waveform"></div>
-        </div>
-      </div>
-    </div>
-  </nav>
+
 
   <section>
     <div class="container" style="margin-top: 7%">
@@ -43,7 +31,7 @@
           <p style="margin-left: 1.2em; font-size: 0.9em; margin-top: 1.3em;">29yo living in liège, belgium <span class="sep1"> | </span><span class="sep2"> | </span><span class="low_accent">29 ans habitant à liège, belgique</span></p>
 
           <p style="margin-left: 1.3em; margin-top: 1em;">musician, guitar teacher <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">musicien, professeur de guitare</span></p>
-          <p style="margin-left: 0.5em">
+          <p style="margin-left: 2.5em">
             <a target="_blank" href="https://www.instagram.com/emmanuelistace/"><i class="fab fa-instagram"></i></a>
             <a target="_blank" href="https://www.youtube.com/user/Manu404"><i class="fab fa-youtube"></i></a>
             <a target="_blank" href="https://m.me/istace.emmanuel"><i class="fab fa-facebook-messenger"></i></a>
@@ -52,7 +40,7 @@
           </p>
 
           <p style="margin-left: 1.3em">software developer, hacker <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">développeur logiciel, bidouilleur</span></p>
-          <p style="margin-left: 0.5em">
+          <p style="margin-left: 2.5em">
             <a target="_blank" href="mailto:contact@hotmail.com"><i class="fa fa-envelope"></i></a>
             <a target="_blank" href="https://github.com/Manu404/"><i class="fab fa-skype"></i></a>
             <a target="_blank" href="https://www.linkedin.com/in/emmanuelistace/"><i class="fab fa-linkedin"></i></a>
@@ -66,6 +54,20 @@
     </div>
   </section>
 
+  <section style="background-color: rgba(27,30,33,0.29)" class="fixed-bottom">
+    <div class="container">
+      <div class="row player">
+        <div class="col-lg-1">
+          <i id="vol_off" onclick="pause()"><img src="img/pause.svg" alt="Pause" height="75"></i>
+          <i id="vol_on" onclick="play()"><img src="img/play-button.svg" alt="Play" height="75"></i>
+        </div>
+        <div class="col-lg-11">
+          <div style="margin-left: 2em" id="waveform"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/wavesurfer/wavesurfer.min.js"></script>
@@ -76,7 +78,8 @@
       responsive: true,
       waveColor: '#fefefe',
       progressColor: '#4a4b4a',
-      barWidth: 1,
+      barWidth: 2,
+      cursorWidth: 0,
       barHeight: 1, // the height of the wave
       barGap: null
     });

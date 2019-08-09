@@ -44,8 +44,8 @@ span.title_accent {
 }
 
 .main-content .fa, .main-content .fab {
-  margin-left: 2em;
   color: #fefefe !important;
+  margin-right: 2em;
 }
 
 .main-content i.fab, .main-content i.fa {
@@ -54,40 +54,33 @@ span.title_accent {
 }
 
 .main-content i.fab:hover, .main-content i.fa:hover {
-  -webkit-transform: scale(1.5);
-  transform: scale(1.5);
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
+
   cursor: pointer;
   color: #f7f7f7 !important;
 }
 
-.player .fa {
-  margin-left: 2em;
-  color: #fefefe !important;
-}
-
-.player i.fa {
-  -webkit-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
-}
-
-.player i.fa:hover {
-  cursor: pointer;
-  color: #d4d4d4 !important;
-}
-
-.player #vol_off, .player #vol_on {
-  font-size: 4em !important;
-  margin-left: 0.8em;
-  margin-top: 0.5em;
-}
-
 .player #vol_off {
   z-index: 1;
-  position: absolute;
+  visibility: visible;
 }
 
 .player #vol_on {
   z-index: 10;
-  position: absolute;
   visibility: collapse;
+}
+
+.player #vol_on, .player #vol_off {
+   position: absolute;
+   margin-left: 2em;
+   margin-top: 1.5em;
+   cursor: pointer;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+ }
+
+.player #vol_on:hover, .player #vol_off:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
