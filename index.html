@@ -8,6 +8,11 @@
 
   <title>Emmanuel Istace</title>
 
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+  <link rel="manifest" href="/img/site.webmanifest">
+
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
   <link href="css/style.min.css" rel="stylesheet">
@@ -46,9 +51,9 @@
             <a target="_blank" href="https://www.facebook.com/Latelierdelaguitare/"><i class="fa fa-calendar"></i></a>
           </p>
 
-          <p style="margin-left: 1.3em">software developer <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">développeur logiciel</span></p>
+          <p style="margin-left: 1.3em">software developer, hacker <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">développeur logiciel, bidouilleur</span></p>
           <p style="margin-left: 0.5em">
-            <a target="_blank" href="mailto:istace.emmanuel@hotmail.com"><i class="fa fa-envelope"></i></a>
+            <a target="_blank" href="mailto:contact@hotmail.com"><i class="fa fa-envelope"></i></a>
             <a target="_blank" href="https://github.com/Manu404/"><i class="fab fa-skype"></i></a>
             <a target="_blank" href="https://www.linkedin.com/in/emmanuelistace/"><i class="fab fa-linkedin"></i></a>
             <a target="_blank" href="https://github.com/Manu404/"><i class="fab fa-github-square"></i></a>
@@ -68,15 +73,20 @@
   <script>
     var wavesurfer = WaveSurfer.create({
       container: '#waveform',
+      responsive: true,
       waveColor: '#fefefe',
       progressColor: '#4a4b4a',
-      barWidth: 2,
+      barWidth: 1,
       barHeight: 1, // the height of the wave
       barGap: null
     });
     wavesurfer.load('bg.mp3');
     wavesurfer.on('ready', function() {
       wavesurfer.setVolume(0.2);
+      wavesurfer.play();
+    });
+
+    wavesurfer.on('finish', function() {
       wavesurfer.play();
     });
 
