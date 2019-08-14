@@ -15,23 +15,22 @@
 
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <link href="css/style.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Quicksand:300&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-
   <section>
-    <div class="container" style="margin-top: 7%">
+    <div class="container" style="margin-bottom: 200px">
       <div class="row main-content">
         <div class="col-lg-12">
-          <h1 class="mt-5">Emmanuel <span class="title_accent">Istace</span></h1>
-          <p style="margin-left: 1.2em; font-size: 0.9em; margin-top: 1.3em;">29yo living in liège, belgium <span class="sep1"> | </span><span class="sep2"> | </span><span class="low_accent">29 ans habitant à liège, belgique</span></p>
+          <h1>Emmanuel <span class="title_accent">Istace</span></h1>
+          <p style="margin-left: 1.2em; margin-top: 1.3em;" class="location">29yo living in liège, belgium <span class="sep1"> | </span><br class="lb" /><span class="sep2"> | </span><span class="low_accent">29 ans habitant à liège, belgique</span></p>
 
-          <p style="margin-left: 1.3em; margin-top: 1em;">musician, guitar teacher <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">musicien, professeur de guitare</span></p>
-          <p style="margin-left: 2.5em">
+          <p style="margin-left: 1.3em; margin-top: 1em;">musician, guitar teacher <span class="sep1"> | </span><br class="lb" /><span class="sep2"> | </span><span class="low_accent">musicien, professeur de guitare</span></p>
+          <p style="margin-left: 2.5em;" class="icon-container">
             <a target="_blank" href="https://www.instagram.com/emmanuelistace/"><i class="fab fa-instagram"></i></a>
             <a target="_blank" href="https://www.youtube.com/user/Manu404"><i class="fab fa-youtube"></i></a>
             <a target="_blank" href="https://m.me/istace.emmanuel"><i class="fab fa-facebook-messenger"></i></a>
@@ -39,8 +38,8 @@
             <a target="_blank" href="https://www.facebook.com/Latelierdelaguitare/"><i class="fa fa-calendar"></i></a>
           </p>
 
-          <p style="margin-left: 1.3em">software developer, hacker <span class="sep1"> | </span> <span class="sep2"> | </span><span class="low_accent">développeur logiciel, bidouilleur</span></p>
-          <p style="margin-left: 2.5em">
+          <p style="margin-left: 1.3em">software developer, hacker <span class="sep1"> | </span><br class="lb" /><span class="sep2"> | </span><span class="low_accent">développeur logiciel, bidouilleur</span></p>
+          <p style="margin-left: 2.5em" class="icon-container">
             <a target="_blank" href="mailto:contact@hotmail.com"><i class="fa fa-envelope"></i></a>
             <a target="_blank" href="https://github.com/Manu404/"><i class="fab fa-skype"></i></a>
             <a target="_blank" href="https://www.linkedin.com/in/emmanuelistace/"><i class="fab fa-linkedin"></i></a>
@@ -50,61 +49,48 @@
         </div>
       </div>
 
-
     </div>
   </section>
 
-  <section style="background-color: rgba(27,30,33,0.29)" class="fixed-bottom">
-    <div class="container">
-      <div class="row player">
-        <div class="col-lg-1">
-          <i id="vol_off" onclick="pause()"><img src="img/pause.svg" alt="Pause" height="75"></i>
-          <i id="vol_on" onclick="play()"><img src="img/play-button.svg" alt="Play" height="75"></i>
+  <section class="fixed-bottom footer">
+    <div class="container player" style="text-align: center">
+      <div class="row justify-content-around">
+        <div class="col-lg-1 col-sm-1 col-1" >
+          <div class="play_pause_button">
+            <img id="pause" class="toggle_button player_button" onclick="playPause()" src="img/pause.svg" alt="Pause" >
+            <img id="play" class="toggle_button player_button" onclick="playPause()" src="img/play-button.svg" alt="Play">
+          </div>
         </div>
-        <div class="col-lg-11">
-          <div style="margin-left: 2em" id="waveform"></div>
+        <div class="col-lg-1 col-sm-1 col-1">
+          <img id="next" class="next_button player_button" onclick="loadNextTitle()" src="img/skip.svg" alt="Next">
+        </div>
+        <div class="col-lg-10 col-sm-10 col-9">
+          <div id="waveform" style="visibility: hidden"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2 col-sm-4 col-4" >
+          <div id="vc">
+            <i class="fa fa-volume-down"></i>
+            <div id="volume"></div>
+            <i class="fa fa-volume-up"></i>
+          </div>
+        </div>
+        <div class="col-lg-10 col-sm-8 col-8">
+          <p class="ml13" id="current_title"></p>
         </div>
       </div>
     </div>
   </section>
 
   <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/jquery/jquery-ui.min.js"></script>
+  <script src="vendor/jquery/jquery.easing.min.js"></script>
+  <script src="vendor/animejs/anime.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/wavesurfer/wavesurfer.min.js"></script>
+  <script src="js/player.js"></script>
 
-  <script>
-    var wavesurfer = WaveSurfer.create({
-      container: '#waveform',
-      responsive: true,
-      waveColor: '#fefefe',
-      progressColor: '#4a4b4a',
-      barWidth: 2,
-      cursorWidth: 0,
-      barHeight: 1, // the height of the wave
-      barGap: null
-    });
-    wavesurfer.load('bg.mp3');
-    wavesurfer.on('ready', function() {
-      wavesurfer.setVolume(0.2);
-      wavesurfer.play();
-    });
-
-    wavesurfer.on('finish', function() {
-      wavesurfer.play();
-    });
-
-    function pause() {
-      wavesurfer.playPause();
-      $("#vol_off").css('visibility', "hidden");
-      $("#vol_on").css('visibility', "visible");
-    }
-
-    function play() {
-      wavesurfer.playPause();
-      $("#vol_on").css('visibility', "hidden");
-      $("#vol_off").css('visibility', "visible")
-    }
-  </script>
 
 </body>
 </html>

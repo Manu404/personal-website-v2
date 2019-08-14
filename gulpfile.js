@@ -16,14 +16,6 @@ const zip = require('gulp-zip');
 var addsrc = require('gulp-add-src');
 const pkg = require('./package.json');
 
-const banner = ['/*!\n',
-    ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
-    ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
-    ' * Licensed under <%= pkg.license %> (https://github.com/BlackrockDigital/<%= pkg.name %>/blob/master/LICENSE)\n',
-    ' */\n',
-    '\n'
-].join('');
-
 // BrowserSync
 function browserSync(done) {
   browsersync.init({
@@ -49,35 +41,25 @@ function clean() {
 function modules() {
   var bootstrap = gulp.src('./node_modules/bootstrap/dist/**/*').pipe(gulp.dest('./vendor/bootstrap'));
   var jquery = gulp.src([
-      './node_modules/jquery/dist/*',
-      '!./node_modules/jquery/dist/core.js'
+      './node_modules/jquery/dist/*.min.js',
+      '!./node_modules/jquery/dist/core.min.js',
+      './node_modules/jquery-ui-dist/*.min.js',
+      './node_modules/jquery-ui-touch-punch/*.min.js',
+      './node_modules/jquery.easing/*.min.js'
     ])
     .pipe(gulp.dest('./vendor/jquery'));
+  var jquery_css = gulp.src('./node_modules/jquery-ui-dist/**/*.css').pipe(gulp.dest('./vendor/jquery/css'));
   var faw = gulp.src('./node_modules/@fortawesome/fontawesome-free/webfonts/**/*').pipe(gulp.dest('./vendor/fontawesome-free/webfonts'));
   var fac = gulp.src('./node_modules/@fortawesome/fontawesome-free/css/all.min.css').pipe(gulp.dest('./vendor/fontawesome-free/css'));
   var ws = gulp.src('./node_modules/wavesurfer/dist/**/*').pipe(gulp.dest('./vendor/wavesurfer/'));
-  return merge(bootstrap, jquery, faw, fac, ws);
+  var animejs = gulp.src('./node_modules/animejs/lib/*.js').pipe(gulp.dest('./vendor/animejs'));
+  return merge(bootstrap, jquery, faw, fac, ws, jquery_css, animejs);
 }
 
-
-// CSS task
 function css() {
   return gulp
-      .src(["./scss/**/*.scss"])
+      .src(["./css/**/*.css", "!./css/**/*.min.css"])
       .pipe(plumber())
-      .pipe(sass({
-        outputStyle: "expanded",
-        includePaths: "./node_modules",
-      }))
-      .on("error", sass.logError)
-      .pipe(autoprefixer({
-        browsers: ['last 2 versions'],
-        cascade: false
-      }))
-      .pipe(header(banner, {
-        pkg: pkg
-      }))
-      .pipe(addsrc(["./css/**/*.css", "!./css/**/*.min.css"]))
       .pipe(gulp.dest("./css"))
       .pipe(rename({
         suffix: ".min"
@@ -87,7 +69,25 @@ function css() {
       .pipe(browsersync.stream());
 }
 
-// JS task
+function scss() {
+    return gulp
+        .src(["./scss/**/*.scss"])
+        .pipe(plumber())
+        .pipe(sass({
+            outputStyle: "expanded",
+            includePaths: "./node_modules",
+        }))
+        .on("error", sass.logError)
+        .pipe(gulp.dest("./css"))
+        .pipe(rename({
+            suffix: ".min"
+        }))
+        .pipe(cleanCSS())
+        .pipe(gulp.dest("./css"))
+        .pipe(browsersync.stream());
+}
+
+
 function js() {
   return gulp
       .src([
@@ -95,9 +95,6 @@ function js() {
         '!./js/*.min.js',
       ])
       .pipe(uglify())
-      .pipe(header(banner, {
-        pkg: pkg
-      }))
       .pipe(rename({
         suffix: '.min'
       }))
@@ -118,8 +115,8 @@ gulp.task('buildProd', () => {
       .pipe(gulp.dest('./release/img/'));
   var js = gulp.src(['./js/**/*', '!./js/*.js', './js/*.min.js',])
       .pipe(gulp.dest('./release/js/'));
-  var audio = gulp.src('./bg.mp3')
-        .pipe(gulp.dest('./release/'));
+  var audio = gulp.src('./audio/**/*')
+        .pipe(gulp.dest('./release/audio/'));
   var vendor = gulp.src(['./vendor/**/*',
     '!./vendor/**/*.js', './vendor/**/*.min.js',
     '!./vendor/**/*.css', '!./vendor/**/*.map', './vendor/**/*.min.css',
@@ -136,16 +133,16 @@ gulp.task('mkZip', () =>
         .pipe(gulp.dest('./'))
 );
 
-
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
-const build = gulp.series(vendor, gulp.parallel(css, js));
+const build = gulp.series(vendor, gulp.parallel(scss, js));
 const watch = gulp.series(build, gulp.parallel(watchFiles, browserSync));
 const prod = gulp.series(build, 'buildProd');
 const pack = gulp.series(prod, 'mkZip');
 
 // Export tasks
 exports.css = css;
+exports.scss = scss;
 exports.js = js;
 exports.clean = clean;
 exports.prod = prod;

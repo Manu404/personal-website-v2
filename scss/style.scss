@@ -1,0 +1,237 @@
+$break-small: 420px;
+$break-medium: 720px;
+$break-large: 1000px;
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media (min-width: 1px) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media (min-width: $break-small) { @content; }
+  }
+  @else if $media == intermediate-screens {
+    @media (min-width: $break-medium) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media (min-width: $break-large) { @content; }
+  }
+}
+
+body {
+  background: url("../img/landing.jpg") no-repeat center center fixed;
+  background-size: cover;
+  -o-background-size: cover;
+  font-size: 1em;
+}
+
+.footer {
+  @include respond-to(handhelds) { background-color: rgba(24, 24, 24, 0.8); }
+  @include respond-to(medium-screens) { background-color: rgba(24, 24, 24, 0.5); }
+  @include respond-to(wide-screens) { background-color: rgba(24, 24, 24, 0.3); }
+}
+
+p {
+  font-family: 'Quicksand', sans-serif;
+  color: #fefefe;
+  font-size: 1.3em;
+}
+
+#waveform {
+  margin-top: 10px;
+}
+
+.main-content {
+  @include respond-to(handhelds) { margin-top: 0px !important; }
+  @include respond-to(medium-screens) { margin-top: 5% !important; }
+  @include respond-to(wide-screens) { margin-top: 10% !important; }
+
+  .icon-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    @include respond-to(handhelds) { width: 80%; }
+    @include respond-to(medium-screens) { width: 50%; }
+    @include respond-to(wide-screens) {   width: 30%; }
+  }
+
+  .lb {
+    display: none;
+    @include respond-to(handhelds) { display: block; }
+    @include respond-to(medium-screens) { display: block; }
+    @include respond-to(wide-screens) {   display: none;}
+  }
+
+  h1 {
+    color: #fefefe;
+    font-family: 'Quicksand', sans-serif;
+    @include respond-to(handhelds) { font-size: 2em; margin-top: 1em !important;}
+    @include respond-to(medium-screens) { font-size: 3.5em;}
+    @include respond-to(wide-screens) { font-size: 5em;}
+  }
+
+  p {
+    @include respond-to(handhelds) { font-size: 1em; }
+    @include respond-to(medium-screens) { font-size: 1.1em; }
+    @include respond-to(wide-screens) { font-size: 1.3em; }
+  }
+
+  .location {
+    @include respond-to(handhelds) { font-size: 0.7em; }
+    @include respond-to(medium-screens) { font-size: 0.85em; }
+    @include respond-to(wide-screens) { font-size: 1em; }
+  }
+
+  .sep1 {
+    color: #e2e2e2;
+    font-size: 0.8em;
+  }
+
+  .sep2 {
+    color: #cecece;
+    font-size: 0.6em;
+  }
+
+  .low_accent {
+    color: #bebebe;
+    font-size: 0.7em;
+  }
+
+  .title_accent {
+    color: #e4e4e4;
+    font-size: 0.8em;
+  }
+
+  .fa, .fab {
+    color: #fefefe !important;
+    margin: auto;
+    font-size: 1em !important;
+    transition: all 0.25s ease-in-out;
+    @include respond-to(handhelds) { font-size: 0.8em !important; }
+    @include respond-to(medium-screens) { font-size: 1em !important; }
+    @include respond-to(wide-screens) { font-size: 1em !important; }
+
+    &:hover {
+      transform: scale(1.2);
+      cursor: pointer;
+      color: #f7f7f7 !important;
+    }
+  }
+}
+
+.player {
+  #pause {
+    z-index: 1;
+    visibility: collapse;
+  }
+
+  #play {
+    z-index: 10;
+    visibility: visible;
+  }
+
+  .toggle_button {
+    position: absolute;
+  }
+
+  .play_pause_button {
+  }
+
+  .player_button {
+    cursor: pointer;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+
+    @include respond-to(handhelds) { width: 25px; margin: 27px -5px; }
+    @include respond-to(medium-screens) { width: 25px; margin: 27px 0px; }
+    @include respond-to(intermediate-screens) { width: 50px; margin: 15px -20px; }
+    @include respond-to(wide-screens) { width: 50px; margin: 15px -12px; }
+
+    &:hover {
+      -webkit-transform: scale(1.1);
+      transform: scale(1.1);
+    }
+  }
+
+  #vc {
+    width: 100%;
+    height: 50%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    .fa-volume-down {
+      margin-left: 8px;
+      left: 0;
+      position: absolute;
+      margin-top: -6px;
+      color: #f7f7f7;
+      z-index: 100;
+    }
+
+    .fa-volume-up {
+      margin-right: -8px;
+      right: 0;
+      position: absolute;
+      margin-top: -6px;
+      color: #f7f7f7;
+      z-index: 100;
+    }
+
+    #volume {
+      position: absolute;
+      left: 1.5em;
+      height: 1px;
+      background: #f7f7f7;
+      border-radius: 15px;
+      z-index: 100;
+      width: 80%;
+      @include respond-to(handhelds) { width: 65% !important; }
+      @include respond-to(medium-screens) { width: 65% !important; }
+      @include respond-to(wide-screens) { width: 80% !important; }
+    }
+
+    .ui-slider-range-min {
+      height: 2px;
+      width: 80%;
+      position: absolute;
+      background-color: #f7f7f7;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      z-index: 500;
+    }
+
+    .ui-slider-handle {
+      width: 15px;
+      height: 15px;
+      border-radius: 15px;
+      background: #FFF;
+      position: absolute;
+      margin-left: -1px;
+      margin-right: 7px;
+      margin-top: -6px;
+      cursor: pointer;
+      outline: none;
+      z-index: 1000;
+    }
+  }
+
+  .ml13 {
+    @include respond-to(handhelds) { font-size: 0.5em; }
+    @include respond-to(medium-screens) { font-size: 0.6em; }
+    @include respond-to(wide-screens) { font-size: 0.8em; }
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+
+    .letter {
+      display: inline-block;
+      line-height: 1em;
+    }
+  }
+}
+
+
