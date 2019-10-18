@@ -26,18 +26,8 @@ function animateTitle(){
     });
 }
 
-function checkAutoPlay(){
-    window.AudioContext = window.AudioContext||window.webkitAudioContext;
-    var context = new AudioContext();
-    autoplayFailed = (context.state === 'suspended');
-}
-
-function isPlayingSafe() {
-    return !autoplayFailed && wavesurfer.isPlaying();
-}
-
 function updatePlayPauseButton() {
-    if(isPlayingSafe()){
+    if(wavesurfer.isPlaying()){
         $("#play").css('visibility', "hidden");
         $("#pause").css('visibility', "visible");
     }
@@ -76,6 +66,7 @@ function loadTitle(index) {
 function loadNextTitle() {
     currentTitle += 1;
     if(currentTitle > playlist.count) currentTitle = 0;
+    playRequested = true;
     loadTitle(currentTitle);
 }
 
@@ -101,13 +92,14 @@ function linearToLog(value) {
 }
 
 var autoplayFailed = false;
+var playRequested = false;
 
 var playlist = [
-    {title : "Misty - Demo excerpt", url : "03 - Misty - For Her - Erroll Garner - Emmanuel Istace - Mai 2019.mp3"},
     {title : "My Funny Valentine - Demo excerpt", url : "02 - My Funny Valentine - For Her - Richard Rodgers & Lorenz Hart - Emmanuel Istace - Mai 2019.mp3"},
+    {title : "Lazy - Demo excerp", url : "Lazy.mp3"},
     {title : "Summertime Demo excerpt", url : "04 - Summertime - For Her - Geroge Gerwhin - Emmanuel Istace - Mai 2019.mp3"},
     {title : "All the things you are - Demo excerpt", url : "01 - All The Things You Are - For Her - Oscar Hammerstein II - Emmanuel Istace - Mai 2019.mp3"},
-    {title : "Lazy - Demo excerp", url : "Lazy.mp3"},
+    {title : "Misty - Demo excerpt", url : "03 - Misty - For Her - Erroll Garner - Emmanuel Istace - Mai 2019.mp3"},
 
 ];
 
@@ -126,17 +118,22 @@ var currentTitle = 0;
 
 wavesurfer.on('ready', function() {
     wavesurfer.setVolume(0.2);
-    wavesurfer.play();
     hideLoading();
+    if(playRequested) {
+        wavesurfer.play();
+        playRequested = false;
+    }
+    updatePlayPauseButton();
 });
 
 wavesurfer.on('finish', function() {
     loadNextTitle();
+    playRequested = true;
 });
 
 $(document).ready(function () {
-    checkAutoPlay();
     loadTitle(0);
+    updatePlayPauseButton();
 
     $("#volume").slider({
         min: 0,
