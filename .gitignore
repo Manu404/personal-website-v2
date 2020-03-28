@@ -58,11 +58,11 @@ typings/
 .env
 
 # next.js build output
+/.idea
 .next
 /vendor
 /node_modules
-/.idea
-/css/style.min.css
 /release
+/js/*.min.js
+/css/*.css
 /*.zip
-/js/player.min.js

@@ -12,5 +12,5 @@ function getAge(dateString)
 }
 
 $(document).ready(function () {
-    $(".age").text(getAge("10/07/1990"));
+    //$(".age").text(getAge("10/07/1990"));
 });
