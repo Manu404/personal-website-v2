@@ -66,3 +66,6 @@ typings/
 /js/*.min.js
 /css/*.css
 /*.zip
+/img/fav
+/js/all.js
+/faviconData.json
