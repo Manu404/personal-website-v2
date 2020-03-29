@@ -16,6 +16,7 @@ const pkg = require('./package.json');
 const concat = require('gulp-concat');
 var realFavicon = require ('gulp-real-favicon');
 var fs = require('fs');
+const fontello = require('gulp-fontello');
 
 function clean() {
     return del(["./vendor/", "./release/", "./*.zip"]);
@@ -32,23 +33,9 @@ function modules() {
     ])
     .pipe(gulp.dest('./vendor/jquery'));
   var jquery_css = gulp.src('./node_modules/jquery-ui-dist/**/*.min.css').pipe(gulp.dest('./vendor/jquery/css'));
-  var faw = gulp.src('./node_modules/@fortawesome/fontawesome-free/webfonts/**/*').pipe(gulp.dest('./vendor/fontawesome-free/webfonts'));
-  var fac = gulp.src('./node_modules/@fortawesome/fontawesome-free/css/all.min.css').pipe(gulp.dest('./vendor/fontawesome-free/css'));
   var ws = gulp.src('./node_modules/wavesurfer/dist/**/*.min.js').pipe(gulp.dest('./vendor/wavesurfer/'));
   var animejs = gulp.src('./node_modules/animejs/lib/*.min.js').pipe(gulp.dest('./vendor/animejs'));
-  return merge(bootstrap, jquery, faw, fac, ws, jquery_css, animejs);
-}
-
-function css() {
-  return gulp
-      .src(["./css/**/*.css", "!./css/**/*.min.css"])
-      .pipe(plumber())
-      .pipe(gulp.dest("./css"))
-      .pipe(rename({
-        suffix: ".min"
-      }))
-      .pipe(cleanCSS())
-      .pipe(gulp.dest("./css"));
+  return merge(bootstrap, jquery, ws, jquery_css, animejs);
 }
 
 function scss() {
@@ -60,26 +47,54 @@ function scss() {
             includePaths: "./node_modules",
         }))
         .on("error", sass.logError)
-        .pipe(gulp.dest("./css"))
-        .pipe(rename({
-            suffix: ".min"
-        }))
-        .pipe(cleanCSS())
         .pipe(gulp.dest("./css"));
 }
 
+function mergeCSS() {
+    return gulp
+        .src([
+            './css/*.css',
+            '!./css/*.min.css',
+            '!./css/*all*.css'
+        ])
+        .pipe(concat('all.css'))
+        .pipe(gulp.dest('./css/'));
+}
 
-function js() {
-  return gulp
-      .src([
-        './js/*.js',
-        '!./js/*.min.js',
-      ])
-      .pipe(uglify())
-      .pipe(rename({
-        suffix: '.min'
-      }))
-      .pipe(gulp.dest('./js'))
+function minifyCss () {
+    return gulp.src([
+        './css/*.css',
+        '!./css/*.min.css',
+    ])
+        .pipe(cleanCSS())
+        .pipe(rename({
+            suffix: ".min"
+        }))
+        .pipe(gulp.dest('./css/'));
+}
+
+function minifyJs() {
+    return gulp
+        .src([
+            './js/*.js',
+            '!./js/*.min.js',
+        ])
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('./js'));
+}
+
+function mergeJs() {
+    return gulp
+        .src([
+            './js/*.js',
+            '!./js/*.min.js',
+            '!./js/*all*.js'
+        ])
+        .pipe(concat('all.js'))
+        .pipe(gulp.dest('./js/'));
 }
 
 function watchFiles() {
@@ -88,11 +103,11 @@ function watchFiles() {
 }
 
 function release() {
-  var css = gulp.src(['./css/**/*', '!./css/*.css', './css/*.min.css',])
+  var css = gulp.src(['./css/all.min.css',])
       .pipe(gulp.dest('./release/css/'));
   var img = gulp.src(['./img/**/*'], {allowEmpty: true})
       .pipe(gulp.dest('./release/img/'));
-  var js = gulp.src(['./js/**/*', '!./js/*.js', './js/*.min.js',])
+  var js = gulp.src(['./js/all.min.js',])
       .pipe(gulp.dest('./release/js/'));
   var audio = gulp.src('./audio/**/*')
         .pipe(gulp.dest('./release/audio/'));
@@ -101,9 +116,11 @@ function release() {
     '!./vendor/**/*.css', '!./vendor/**/*.map', './vendor/**/*.min.css',
     './vendor/**/aos.css', './vendor/**/aos.js'])
       .pipe(gulp.dest('./release/vendor/'));
+  var font = gulp.src(['./font/**/*',])
+        .pipe(gulp.dest('./release/font/'));
   var index = gulp.src(['./index.html'])
       .pipe(gulp.dest('./release/'));
-  return merge(css, img, js, vendor, index, audio);
+  return merge(css, img, js, vendor, index, audio, font);
 }
 
 function mkZip() {
@@ -126,10 +143,6 @@ function mergeJs(){
 // File where the favicon markups are stored
 var FAVICON_DATA_FILE = 'faviconData.json';
 
-// Generate the icons. This task takes a few seconds to complete.
-// You should run it at least once to create the icons. Then,
-// you should run it whenever RealFaviconGenerator updates its
-// package (see the check-for-favicon-update task below).
 gulp.task('generate-favicon', function(done) {
     return realFavicon.generateFavicon({
         masterPicture: 'fav/fav.png',
@@ -206,19 +219,12 @@ gulp.task('generate-favicon', function(done) {
     });
 });
 
-// Inject the favicon markups in your HTML pages. You should run
-// this task whenever you modify a page. You can keep this task
-// as is or refactor your existing HTML pipeline.
 gulp.task('inject-favicon-markups', function() {
     return gulp.src([ './index.html' ])
         .pipe(realFavicon.injectFaviconMarkups(JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).favicon.html_code))
         .pipe(gulp.dest('./'));
 });
 
-// Check for updates on RealFaviconGenerator (think: Apple has just
-// released a new Touch icon along with the latest version of iOS).
-// Run this task from time to time. Ideally, make it part of your
-// continuous integration system.
 gulp.task('check-for-favicon-update', function(done) {
     var currentVersion = JSON.parse(fs.readFileSync(FAVICON_DATA_FILE)).version;
     realFavicon.checkForUpdates(currentVersion, function(err) {
@@ -229,9 +235,17 @@ gulp.task('check-for-favicon-update', function(done) {
     });
 });
 
+function glyph () {
+    return gulp.src('glyph.json')
+        .pipe(fontello({
+            css: "css",
+            font: "font"
+        }))
+        .pipe(gulp.dest('./'));
+}
 
 // Define complex tasks
-const build = gulp.series(clean, mergeJs, gulp.parallel(modules, scss, js));
+const build = gulp.series(clean, glyph, gulp.parallel(modules, scss), gulp.parallel(mergeCSS, mergeJs),  gulp.parallel(minifyCss, minifyJs));
 const prod = gulp.series(build, release);
 const watch = gulp.series(build, watchFiles);
 const pack = gulp.series(prod, mkZip);
@@ -239,9 +253,8 @@ const genFav = gulp.series('generate-favicon');
 const fav = gulp.series('check-for-favicon-update', genFav,  'inject-favicon-markups');
 
 // Export tasks
-exports.css = css;
 exports.scss = scss;
-exports.js = js;
+exports.glyph = glyph;
 exports.clean = clean;
 exports.prod = prod;
 exports.build = build;
