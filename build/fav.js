@@ -6,12 +6,12 @@ const del = require("del");
 var FAVICON_DATA_FILE = 'faviconData.json';
 
 gulp.task('cleanFav', function () {
-    return del(["fav/*.*", "!fav/source/**/*"]);
+    return del(["'img/fav/**/*"]);
 });
 
 gulp.task('generate-favicon', function(done) {
     return realFavicon.generateFavicon({
-        masterPicture: 'fav/source/fav.png',
+        masterPicture: 'img/source/fav.png',
         dest: 'img/fav/',
         iconsPath: 'img/fav/',
         design: {
