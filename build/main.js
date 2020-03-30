@@ -27,7 +27,7 @@ gulp.task('modules', function () {
 gulp.task('release', function () {
     var css = gulp.src(['./css/all.min.css',])
         .pipe(gulp.dest('./release/css/'));
-    var img = gulp.src(['./img/**/*'], {allowEmpty: true})
+    var img = gulp.src(['./img/**/*', '!./img/**/source/*', '!./img/**/source/**/*'], {allowEmpty: false})
         .pipe(gulp.dest('./release/img/'));
     var js = gulp.src(['./js/all.min.js',])
         .pipe(gulp.dest('./release/js/'));
