@@ -3,6 +3,11 @@ const peakbuilder = require('gulp-wavesurfer-peakbuilder');
 const download = require('gulp-download-files');
 const decompress = require('gulp-decompress');
 const fs = require('fs');
+const del = require("del");
+
+gulp.task('cleanPeaks', function () {
+    return del(["./audio/peaks"]);
+});
 
 gulp.task('buildPeaks', function() {
     return gulp.src('./audio/*.mp3')

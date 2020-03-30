@@ -1,12 +1,17 @@
 const gulp = require("gulp");
 const fs = require('fs');
 const realFavicon = require('gulp-real-favicon');
+const del = require("del");
 
 var FAVICON_DATA_FILE = 'faviconData.json';
 
+gulp.task('cleanFav', function () {
+    return del(["fav/*.*", "!fav/source/**/*"]);
+});
+
 gulp.task('generate-favicon', function(done) {
     return realFavicon.generateFavicon({
-        masterPicture: 'fav/fav.png',
+        masterPicture: 'fav/source/fav.png',
         dest: 'img/fav/',
         iconsPath: 'img/fav/',
         design: {
