@@ -120,13 +120,17 @@ p {
 }
 
 .player {
+  #ctrl {
+
+  }
+
   #pause {
     z-index: 1;
     visibility: collapse;
   }
 
   #play {
-    z-index: 10;
+    z-index: 1;
     visibility: visible;
   }
 
@@ -135,6 +139,7 @@ p {
   }
 
   .play_pause_button {
+
   }
 
   .player_button {

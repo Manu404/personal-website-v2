@@ -26,80 +26,18 @@ function animateTitle(){
     });
 }
 
-function updatePlayPauseButton() {
-    if(wavesurfer.isPlaying()){
-        $("#play").css('visibility', "hidden");
-        $("#pause").css('visibility', "visible");
-    }
-    else {
-        $("#play").css('visibility', "visible");
-        $("#pause").css('visibility', "hidden");
-    }
-}
-
-function playPause() {
-    if(needLoading == true){
-        wavesurfer.play();
-        needLoading = false;
-    }
-    else {
-        wavesurfer.playPause();
-    }
-    updatePlayPauseButton();
-}
-
-function getUrl(index) {
-    if(index > playlist.count || index < 0) index = 0;
-    return "audio/" + playlist[index].url;
-}
-
-function getName(index) {
-    if(index > playlist.count || index < 0) index = 0;
-    return playlist[index].title;
-}
-
-function loadTitle(index) {
-    showLoading();
-    wavesurfer.load(getUrl(index));
-}
-
-function loadNextTitle() {
-    currentTitle += 1;
-    if(currentTitle > playlist.count) currentTitle = 0;
-    playRequested = true;
-    loadTitle(currentTitle);
-}
-
-function showLoading(){
-    $("#waveform").css('visibility', 'hidden');
-    $("#current_title").text("Loading...");
-    animateTitle();
-}
-
-function hideLoading() {
-    $("#waveform").css('visibility', 'visible');
-    $("#current_title").text(getName(currentTitle));
-    animateTitle();
-}
-
-function linearToLog(value) {
-    var minp = 0;
-    var maxp = 100;
-    var minv = Math.log(1);
-    var maxv = Math.log(100);
-    var scale = (maxv-minv) / (maxp-minp);
-    return Math.exp(minv + scale*(value-minp));
-}
-
 var needLoading = false;
 var playRequested = false;
+var currentTitle = 0;
+var firstLoad = true;
+var isLoading = false;
 
 var playlist = [
-    {title : "My Funny Valentine - Demo excerpt", url : "02 - My Funny Valentine - For Her - Richard Rodgers & Lorenz Hart - Emmanuel Istace - Mai 2019.mp3"},
-    {title : "Lazy - Demo excerp", url : "Lazy.mp3"},
-    {title : "Summertime Demo excerpt", url : "04 - Summertime - For Her - Geroge Gerwhin - Emmanuel Istace - Mai 2019.mp3"},
-    {title : "All the things you are - Demo excerpt", url : "01 - All The Things You Are - For Her - Oscar Hammerstein II - Emmanuel Istace - Mai 2019.mp3"},
-    {title : "Misty - Demo excerpt", url : "03 - Misty - For Her - Erroll Garner - Emmanuel Istace - Mai 2019.mp3"},
+    {title : "My Funny Valentine - Demo excerpt", url : "valentine"},
+    {title : "Lazy - Demo excerp", url : "Lazy"},
+    {title : "Summertime Demo excerpt", url : "summertime"},
+    {title : "All the things you are - Demo excerpt", url : "all"},
+    {title : "Misty - Demo excerpt", url : "misty"},
 
 ];
 
@@ -114,16 +52,94 @@ var wavesurfer = WaveSurfer.create({
     height: 60,
     barGap: null
 });
-var currentTitle = 0;
+
+function getUrl(index) {
+    if(index > playlist.count || index < 0) index = 0;
+    return "audio/" + playlist[index].url + ".mp3";
+}
+
+function getPeakUrl(index) {
+    if(index > playlist.count || index < 0) index = 0;
+    return "audio/peaks/" + playlist[index].url + ".json";
+}
+
+function getName(index) {
+    if(index > playlist.count || index < 0) index = 0;
+    return playlist[index].title;
+}
+
+function updateButtons() {
+    if(wavesurfer.isPlaying()){
+        $("#play").css('visibility', "hidden");
+        $("#pause").css('visibility', "visible");
+    }
+    else {
+        $("#play").css('visibility', "visible");
+        $("#pause").css('visibility', "hidden");
+    }
+}
+
+function loadTitle(index) {
+    showLoading();
+    drawPeaks([]);
+    wavesurfer.load(getUrl(index));
+}
+
+function playPause() {
+    if(isLoading) return;
+    if(firstLoad == true) {
+        playRequested = true;
+        loadTitle(0);
+        firstLoad = false;
+    }
+    else if(needLoading == true){
+        wavesurfer.play();
+        needLoading = false;
+        updateButtons();
+    }
+    else {
+        wavesurfer.playPause();
+        updateButtons();
+    }
+}
+
+function loadNextTitle() {
+    if(isLoading) return;
+
+    currentTitle += 1;
+    if(currentTitle > playlist.count) currentTitle = 0;
+    playRequested = true;
+    loadTitle(currentTitle);
+}
+
+function showLoading(){
+    isLoading = true;
+    $("#waveform").css('visibility', 'hidden');
+    $("#current_title").text("Loading...");
+    animateTitle();
+}
+
+function hideLoading() {
+    isLoading = false;
+    $("#waveform").css('visibility', 'visible');
+    $("#ctrl").css('visibility', 'visible', "important");
+    $("#current_title").text(getName(currentTitle));
+    animateTitle();
+}
 
 wavesurfer.on('ready', function() {
     wavesurfer.setVolume(0.2);
     hideLoading();
+    loadPeaks(currentTitle);
     if(playRequested) {
         wavesurfer.play();
         playRequested = false;
     }
-    updatePlayPauseButton();
+    updateButtons();
+});
+
+wavesurfer.on('error', function(err) {
+    console.log(err);
 });
 
 wavesurfer.on('finish', function() {
@@ -132,8 +148,7 @@ wavesurfer.on('finish', function() {
 });
 
 $(document).ready(function () {
-    loadTitle(0);
-    updatePlayPauseButton();
+    loadPeaks(currentTitle);
 
     $("#volume").slider({
         min: 0,
@@ -149,3 +164,35 @@ $(document).ready(function () {
         }
     });
 });
+
+function linearToLog(value) {
+    var minp = 0;
+    var maxp = 100;
+    var minv = Math.log(1);
+    var maxv = Math.log(100);
+    var scale = (maxv-minv) / (maxp-minp);
+    return Math.exp(minv + scale*(value-minp));
+}
+
+function drawPeaks(peaks){
+    wavesurfer.backend.setPeaks(peaks);
+    wavesurfer.drawBuffer();
+}
+
+function loadPeaks(index){
+    showLoading();
+    fetch(getPeakUrl(index))
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+        })
+        .then(function (peaks) {
+            drawPeaks(peaks);
+            hideLoading();
+        })
+        .catch(function (e) {
+            console.error('error', e);
+        });
+}
