@@ -1,6 +1,6 @@
-const realFavicon = require ('gulp-real-favicon');
 const gulp = require("gulp");
 const fs = require('fs');
+const realFavicon = require('gulp-real-favicon');
 
 var FAVICON_DATA_FILE = 'faviconData.json';
 
@@ -95,11 +95,3 @@ gulp.task('check-for-favicon-update', function(done) {
         done();
     });
 });
-
-function build(){
-    return gulp.series('check-for-favicon-update', 'generate-favicon',  'inject-favicon-markups');
-}
-
-module.exports = {
-    build
-};
