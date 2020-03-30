@@ -38,9 +38,9 @@ function updatePlayPauseButton() {
 }
 
 function playPause() {
-    if(autoplayFailed){
+    if(needLoading == true){
         wavesurfer.play();
-        autoplayFailed = false;
+        needLoading = false;
     }
     else {
         wavesurfer.playPause();
@@ -91,7 +91,7 @@ function linearToLog(value) {
     return Math.exp(minv + scale*(value-minp));
 }
 
-var autoplayFailed = false;
+var needLoading = false;
 var playRequested = false;
 
 var playlist = [
