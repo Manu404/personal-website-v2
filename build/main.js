@@ -55,7 +55,8 @@ gulp.task('glyph', function () {
     return gulp.src('./build/glyph.json')
         .pipe(fontello({
             css: "css",
-            font: "font"
+            font: "font",
+			host: 'https://fontello.com'
         }))
         .pipe(gulp.dest('./'));
 });
