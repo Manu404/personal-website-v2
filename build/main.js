@@ -52,7 +52,7 @@ gulp.task('mkZip', function () {
 });
 
 gulp.task('glyph', function () {
-    return gulp.src('build/glyph.json')
+    return gulp.src('./build/glyph.json')
         .pipe(fontello({
             css: "css",
             font: "font"
