@@ -21,7 +21,8 @@ const inject = gulp.series(fav, 'inject-favicon-markups');
 const peaks = gulp.series('cleanPeaks', 'downloadAudiowaveform', 'buildPeaks');
 
 const watch = gulp.series(build, 'watchFiles');
-const init = gulp.series(gulp.parallel(peaks, fav), build);
+//const init = gulp.series(gulp.parallel(peaks, fav), build);
+const init = gulp.series(fav, build);
 const release = gulp.series(build, 'release');
 const pack = gulp.series(release, 'mkZip');
 
