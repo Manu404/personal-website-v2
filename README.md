@@ -1,5 +1,7 @@
 # personal-website-v2
 
+Require NodeJS 14, cfr : https://www.nubo.eu/Install-Multiple-Node-Versions-On-Windows/
+
     npm install gulp --global
     npm install
     gulp
