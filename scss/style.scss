@@ -45,6 +45,10 @@ p {
   @include respond-to(medium-screens) { margin-top: 5% !important; }
   @include respond-to(wide-screens) { margin-top: 10% !important; }
 
+  #job, #jobicon, #location, #name-tile {
+    opacity: 0;
+  }
+
   .icon-container {
     display: flex;
     flex-direction: row;
